@@ -30,6 +30,9 @@ public class Recursion {
             	if(checkOpenBrace(statement) == true) {
             		
                   String[] arrWords = statement.split(" ");
+                  String methodName = arrWords[2];
+
+                System.out.println(methodName);
 
             	}
             }
