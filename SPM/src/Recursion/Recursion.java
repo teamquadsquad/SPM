@@ -26,8 +26,12 @@ public class Recursion {
             String statement = sc.nextLine();
 //            System.out.println(statement);
             if (checkColon(statement) == true) {
-            	String[] arrWords = statement.split(" ");
-            	checkOpenBrace(arrWords);
+            	
+            	if(checkOpenBrace(statement) == true) {
+            		
+                  String[] arrWords = statement.split(" ");
+
+            	}
             }
 //            String[] arrWords = statement.split(" ");
 
@@ -35,9 +39,10 @@ public class Recursion {
         }
     }
 
-    private boolean checkOpenBrace(String[] arrWords) {
-		return true;
-		
+    private boolean checkOpenBrace(String statement) {
+    	if (statement.contains("("))
+    			return true;
+    	return false;
 	}
 
 	private boolean checkColon(String statement) {
