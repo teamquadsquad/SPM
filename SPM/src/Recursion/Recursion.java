@@ -2,74 +2,137 @@ package Recursion;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Recursion {
-    private static int Cs = 0;
+
+    private static int recCount = 0;
+    private static boolean isInheritance = false;
+    static String path = "C:\\Users\\hwarlk\\Desktop\\sampleText.txt";
 
     public static void main(String[] args) throws IOException {
 
-        new Recursion().ReadFromFile();
-        System.out.println("The value of Cs = " + Cs);
-
-    }
-
-    private void ReadFromFile() throws IOException {
-
-        String path = "C:\\Users\\hwarlk\\Desktop\\sampleText.txt";
         File file = new File(path);
+
         @SuppressWarnings("resource")
-		Scanner sc = new Scanner(file);
+        Scanner sc = new Scanner(file);
+        new Recursion().ReadFromFile(sc);
+
+        System.out.println("The value of Cs = " + recCount);
+        System.out.println("Inheritance = " + isInheritance);
+    }
+    
+    private void ReadFromFile(Scanner sc) throws IOException {
+
+        String outerMethodName = "";
+        String innerMethodName = "";
+
+        HashMap<String, Integer> outerMethodNameArray = new HashMap<String, Integer>();
+        HashMap<String, Integer> innerMethodNameArray = new HashMap<String, Integer>();
+        int count = 0;
+        
         while (sc.hasNextLine()) {
+            count++;
             String statement = sc.nextLine();
-//            System.out.println(statement);
-            if (checkColon(statement) == true) {
-            	
-            	if(checkOpenBrace(statement) == true) {
-            		
-                  String[] arrWords = statement.split(" ");
+            
+            if (checkColon(statement) == false) {
 
-            	}
+                if (checkOpenBrace(statement) == true) {
+
+                    outerMethodName = getMethodName(statement);
+
+                    outerMethodNameArray.put(outerMethodName, count);
+
+                }
+            } else if (checkColon(statement) == true) {
+
+                if (checkOpenBrace(statement) == true) {
+
+                    innerMethodName = getMethodName(statement);
+
+                    innerMethodNameArray.put(innerMethodName, count);
+
+                }
             }
-//            String[] arrWords = statement.split(" ");
 
-//            checkRecursion(arrWords);
+            if (checkInheritance(statement)) {
+
+                isInheritance = true;
+            }
+        }
+        
+        Iterator it = outerMethodNameArray.entrySet().iterator();
+
+        while (it.hasNext()) {
+
+            HashMap.Entry pairOuter = (HashMap.Entry) it.next();
+
+            Iterator itInner = innerMethodNameArray.entrySet().iterator();//change innerMethodNameArray 
+            while (itInner.hasNext()) {
+                HashMap.Entry pairInner = (HashMap.Entry) itInner.next();
+//                System.out.println(pairOuter.getKey() + " --------- " + pairInner.getKey());
+                String innerKey = pairOuter.getKey().toString();
+                String outerKey = pairInner.getKey().toString();
+                if (innerKey.equals(outerKey)) {
+                  it.remove();
+                  itInner.remove();
+
+                  recCount++;
+                }
+            }
         }
     }
 
-    private boolean checkOpenBrace(String statement) {
-    	if (statement.contains("("))
-    			return true;
-    	return false;
-	}
+    private String getMethodName(String statement) {
 
-	private boolean checkColon(String statement) {
-    	
-    	int size = statement.length() - 1;
+        String[] name = statement.split("\\(");
+        String methodName = "";
+        for (int i = 0; i < name.length; i++) {
 
-    	if (size >= 0) {
-    		if(statement.charAt(size) == ';')
-                return true;
-    	}
-    	return false;
+            if (name[i + 1].contains(")")) {
+
+                String[] arrWords = name[i].split(" ");
+                methodName = arrWords[arrWords.length - 1];
+                System.out.println("-->" + methodName);
+                break;
+            }
+        }
+
+        return methodName;
     }
 
-//    private void checkRecursion(String[] arrWords) {
-//
-//
-//        for (String word : arrWords) {
-//            checkOperatorContains(word, "(?<!\\+)\\+(?![+=])"); // +
-//
-//        }
-//    }
+    private boolean checkOpenBrace(String statement) {
 
-//    private void checkOperatorContains(String word, String operator) {
-//        Pattern p = Pattern.compile(operator);
-//        Matcher m = p.matcher(word);
-//        if (m.find()) {
-//            Cs++;
-//        }
-//    }
+        if (statement.contains("(")) {
+
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkColon(String statement) {
+
+        if (statement.contains(";")) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkInheritance(String statement) {
+
+        String[] classCode = statement.split(" ");
+
+        for (String name : classCode) {
+
+            if (name.equals("implements") || name.equals("extends")) {
+               
+                return true;
+            }
+        }
+        return false;
+    }
 }
