@@ -39,12 +39,12 @@ public class mainController implements Initializable {
 
         int Ctc = ctcService.findCtc( selectedFilePath );
 
-        Inheritance inheritance = new Inheritance();
-        try {
-            inheritance.checkCi(selectedFilePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        Inheritance inheritance = new Inheritance();
+//        try {
+//            inheritance.checkCi(selectedFilePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         //Cs Ctc Cnc Ci
         //Total calculation
