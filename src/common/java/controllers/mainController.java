@@ -2,6 +2,8 @@ package common.java.controllers;
 
 import hashini.java.service.Inheritance;
 import javafx.event.ActionEvent;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -15,6 +17,7 @@ import savindu.java.service.ctcServiceImpl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -79,6 +82,17 @@ public class mainController implements Initializable {
             findComplexity( selectedFilePath.toString() );
         }
 
+    }
+
+    @FXML
+    private void changeScreenCustomersButtonPushed(ActionEvent event) throws IOException {
+
+        Parent CustomersParent = FXMLLoader.load(getClass().getResource("next.fxml"));
+        Scene CustomersScene = new Scene(CustomersParent);
+
+        Stage window = (Stage)( (Node)event.getSource()).getScene().getWindow();
+        window.setScene(CustomersScene);
+        window.show();
     }
 
     public void handleExit(ActionEvent actionEvent) {

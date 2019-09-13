@@ -36,7 +36,11 @@ public class ctcServiceImpl implements ctcService {
             //Conditional Control Structures
             CheckConditionalControlStructures( word, "\\bif\\b" ); //if
             CheckConditionalControlStructures( word, "\\belse if\\b" ); //else if
+<<<<<<< HEAD
             //CheckConditionalControlStructures( word, "\\belse(?! if)\\b" ); //else not working
+=======
+            CheckConditionalControlStructures( word, "\\belse(?! if)\\b" ); //else not working
+>>>>>>> 27e6d9ac611d426074e0fcb7101cc12ce316b631
 
             //Iterative Control Structures
             CheckIterativeControlStructures( word, "\\bfor\\b" ); //for
