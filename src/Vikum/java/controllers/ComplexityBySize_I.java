@@ -3,6 +3,8 @@ package Vikum.java.controllers;   ////https://regexr.com/4id2l
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,7 +12,8 @@ import java.util.regex.Pattern;
 public class ComplexityBySize_I {
     private static int Cs = 0;
     private int localCs = 0;
-    private ArrayList<String> arrMethodsDetected = new ArrayList<>();
+    private List<String> arrMethodsDetected = new ArrayList<>();
+    private List<String> variablesDetected = new ArrayList<>();
 
     public int ReadFromFile(String selectedFilePath) throws IOException {
 
@@ -72,14 +75,15 @@ public class ComplexityBySize_I {
             //check for method calls
             checkForMethodCalls(statement);
 
+            //check for variable declarations
+            statement = checkForVariableDeclaration(statement);
+
+            //check for multiple variable declarations
+            statement = checkForMultipleVariableDeclaration(statement);
+
             String[] arrWords = statement.split(" ");
 
-            checkAssignmentOperators(arrWords);
-            checkMiscellaneousOperators(arrWords);
-            checkBitwiseOperators(arrWords);
-            checkLogicalOperators(arrWords);
-            checkRelationOperators(arrWords);
-            checkArithmeticOperators(arrWords);
+            checkForOperators(arrWords);
 
             System.out.print("                  Statement Cs: " + localCs);
             Cs += localCs;
@@ -132,9 +136,8 @@ public class ComplexityBySize_I {
             if (matchedMethod != null) {
                 String[] arrMethodNames = matchedMethod.split("\\(");
                 arrMethodsDetected.add(arrMethodNames[0]);
-                checkStatement = checkStatement.replaceAll(Operators.methodIdentifier, "");
+                checkStatement = checkStatement.replaceAll(arrMethodNames[0], "");
                 System.out.print("    Method Detected: " + matchedMethod);
-//            localCs++;
             }
         }
         return checkStatement;
@@ -145,12 +148,6 @@ public class ComplexityBySize_I {
             String matchedMethodCall = null;
             String operator = "\\b" + method + "\\b";
             if (matchPattern(checkStatement, operator)) {
-//                Matcher m = setMatcher(checkStatement, operator);
-//                if (m.find()) {
-//                    matchedMethodCall = m.group(0);
-//                    localCs++;
-//                }
-//                System.out.print("    Method Call Detected: " + matchedMethodCall);
                 matchedMethodCall = getMatchedPattern(checkStatement, operator);
                 System.out.print("    Method Call Detected: " + matchedMethodCall);
 
@@ -158,67 +155,70 @@ public class ComplexityBySize_I {
         }
     }
 
-    private void checkArithmeticOperators(String[] arrWords) {
+    //flak
+    private String checkForVariableDeclaration(String checkStatement) {
+        if (matchPattern(checkStatement, Operators.variableIdentifier)) {
+            String matchedVariable = getMatchedPattern(checkStatement, Operators.variableIdentifier);
+            if (matchedVariable != null) {
+                variablesDetected.add(matchedVariable);
+                checkStatement = checkStatement.replaceAll(matchedVariable, "");
+                System.out.print("    Variable Detected: " + matchedVariable);
+            }
+        }
+        return checkStatement;
+    }
+
+    private String checkForMultipleVariableDeclaration(String checkStatement) {
+        if (matchPattern(checkStatement, Operators.multiVariableIdentifier)) {
+            String matchedVariables = getMatchedPattern(checkStatement, Operators.multiVariableIdentifier);
+            if (matchedVariables != null) {
+                localCs--;
+                String[] splitElements = matchedVariables.trim().split(",");
+                List<String> splitElementsList = Arrays.asList(splitElements);
+                variablesDetected.addAll(splitElementsList);
+                for (String element : splitElementsList) {
+                    System.out.print("    Variable Detected: " + element);
+                    localCs++;
+                }
+                checkStatement = checkStatement.replaceAll(matchedVariables, "");
+            }
+        }
+        return checkStatement;
+    }
+
+    private void checkForOperators(String[] arrWords) {
         for (String word : arrWords) {
             for (String operator : Operators.arithmeticOperators) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkRelationOperators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.relationOperators) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkLogicalOperators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.logicalOperators) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkBitwiseOperators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.bitwiseOperators) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkMiscellaneousOperators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.miscellaneousOperators) {
                 checkOperatorContains(word, operator);
             }
-//            checkDotOperatorContains(word); // .
-        }
-
-    }
-
-    private void checkAssignmentOperators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.assignmentOperators) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkKeyWords(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.keyWords) {
                 checkOperatorContains(word, operator);
             }
-        }
-    }
-
-    private void checkManipulators(String[] arrWords) {
-        for (String word : arrWords) {
             for (String operator : Operators.manipulators) {
+                checkOperatorContains(word, operator);
+            }
+            for (String operator : Operators.randomOperators) {
+                checkOperatorContains(word, operator);
+            }
+            for (String operator : Operators.specialKeyWords) {
+                checkSpecialKeyWordContains(word, operator);
+            }
+            for (String operator : variablesDetected) {
                 checkOperatorContains(word, operator);
             }
         }
@@ -226,19 +226,16 @@ public class ComplexityBySize_I {
 
     private void checkOperatorContains(String word, String operator) {
         if (matchPattern(word, operator)) {
-//            localCs++;
             String token = getMatchedPattern(word, operator);
-            System.out.println("    Token Detected: "+token);
+            System.out.println("    Token Detected: " + token);
         }
     }
 
-    private void checkDotOperatorContains(String word) {
-        if (matchPattern(word, "(?<![-+!%^&*<>=:/|~^.])\\.(?![-+!%^&*<>=:/|~^.])")) {
-            String[] words = word.split("\\.");
-            for (int i = 0; i < words.length - 1; i++) {
-                words[i] = words[i].concat(".");
-                localCs++;
-            }
+    private void checkSpecialKeyWordContains(String word, String operator) {
+        if (matchPattern(word, operator)) {
+            String token = getMatchedPattern(word, operator);
+            System.out.println("    (Special)Token Detected: " + token);
+            localCs++;
         }
     }
 
@@ -254,12 +251,8 @@ public class ComplexityBySize_I {
 
     private String getMatchedPattern(String word, String operator) {
         Matcher m = setMatcher(word, operator);
-//        if (m.find()) {
-//            return m.group();
-//        }
-//        return null;
+
         while (m.find()) {
-//            System.out.println(m.group());
             localCs++;
             String replaced = word.replaceFirst(operator, "");
             getMatchedPattern(replaced, operator);

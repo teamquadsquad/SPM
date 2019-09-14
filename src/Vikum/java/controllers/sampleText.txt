@@ -2,6 +2,14 @@ public boolean checkMultiLineCommentStart(String checkStatement) {
         //return checkStatement.contains("/*");
 }
 
+ ‘new’, ‘delete’, ‘throw’, and ‘throws’ key words;
+
+cout << var1 << "Some String" << var2 << endl;
+
+int val;
+String str;
+String str, sdfs, sdf;
+
 public boolean val =  checkMultiLineCommentStart(statement);
 
 /*g+s;
