@@ -40,7 +40,6 @@ public final class Operators {
             "<<<"
     };
 
-    //dot operator is not included here
     public static final String[] miscellaneousOperators = {
             "(?<![-+!%^&*<>=:/|~^.]),(?![-+!%^&*<>=:/|~^.])",
             "->",
@@ -66,6 +65,7 @@ public final class Operators {
     public static final String[] keyWords = {
             "\\bvoid\\b",
             "\\bboolean\\b",
+            "\\bbool\\b",
             "\\blong\\b",
             "\\bbyte\\b",
             "\\bshort\\b",
@@ -108,9 +108,19 @@ public final class Operators {
 
     public static final String arrayNames = "((\\w*) |(\\w*))\\[(.*)\\]";
 
+    public static final String[] randomOperators = {
+            numericCharacters,
+            classKeyWord,
+            referenceOperator,
+            arrayNames
+    };
+
 //    public static final String methodIdentifier = "((\\w*)(?<!while)(?<!if)(?<!switch)(?<!for))\\(.*\\)( {|{)";
     public static final String methodIdentifier = "((\\w*)(?<!((while)|(while )))(?<!((if)|(if )))(?<!((switch)|(switch )))(?<!((for)|(for ))))\\((.*)\\)(?![;).,])";
 
+    public static final String variableIdentifier = "(?<=((\\bboolean\\s\\b)|(\\bbool\\s\\b)|(\\blong\\s\\b)|(\\bbyte\\s\\b)|(\\bshort\\s\\b)|(\\bdouble\\s\\b)|(\\bint\\s\\b)|(\\bfloat\\s\\b)|(\\bstring\\s\\b)|(\\bString\\s\\b)|(\\bchar\\s\\b)))(\\w*)";
+
+    public static final String multiVariableIdentifier = "(?<=((\\bboolean\\s\\b)|(\\bbool\\s\\b)|(\\blong\\s\\b)|(\\bbyte\\s\\b)|(\\bshort\\s\\b)|(\\bdouble\\s\\b)|(\\bint\\s\\b)|(\\bfloat\\s\\b)|(\\bstring\\s\\b)|(\\bString\\s\\b)|(\\bchar\\s\\b)))(\\w*(,(.*)))(?=;)";
     //To do:
     // dereference (*) operator
     // object, variable, and array names
