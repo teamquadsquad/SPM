@@ -69,17 +69,6 @@ public class mainController implements Initializable {
 
     }
 
-    @FXML
-    private void changeScreenCustomersButtonPushed(ActionEvent event) throws IOException {
-
-        Parent CustomersParent = FXMLLoader.load(getClass().getResource("next.fxml"));
-        Scene CustomersScene = new Scene(CustomersParent);
-
-        Stage window = (Stage)( (Node)event.getSource()).getScene().getWindow();
-        window.setScene(CustomersScene);
-        window.show();
-    }
-
     public void handleExit(ActionEvent actionEvent) {
         //TODO
     }

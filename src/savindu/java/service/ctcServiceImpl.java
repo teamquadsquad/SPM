@@ -8,10 +8,11 @@ import java.util.regex.Pattern;
 
 public class ctcServiceImpl implements ctcService {
 
-    private int Ctc = 0;
+    private int totCtc = 0;
+    private int lineCtc = 0;
     private String statement;
     boolean skipStatement = false;
-    String[] arrWords;
+    //String[] arrWords; //matches each word, resulting duplicate increments // eg- if, else if // 2 increments for 'if' regex
 
     @Override
     public int findCtc ( String path ) throws FileNotFoundException {
@@ -20,112 +21,117 @@ public class ctcServiceImpl implements ctcService {
         Scanner sc = new Scanner(file);
 
         while ( sc.hasNextLine() ) {
+
             statement = sc.nextLine();
+            //arrWords = statement.split(" ");
+            CheckControlStructures( statement );
 
-            arrWords = statement.split(" ");
-
-            CheckControlStructures(arrWords);
+            System.out.println(statement + "  ***Ctc: " + lineCtc);
+            lineCtc = 0;
         }
 
-        return Ctc;
+        return totCtc;
     }
 
-    public void CheckControlStructures(String[] arrWords ) {
-        for (String word : arrWords) {
+    public void CheckControlStructures( String statement ) {
+        //for (String word : arrWords) {}
 
-            //Conditional Control Structures
-            CheckConditionalControlStructures( word, "\\bif\\b" ); //if
-            CheckConditionalControlStructures( word, "\\belse if\\b" ); //else if
-            CheckConditionalControlStructures( word, "\\belse(?! if)\\b" ); //else not working
+        //Conditional Control Structures
+        CheckConditionalControlStructures( statement, "(?<!(\\belse\\s\\b))if" ); //if
+        CheckConditionalControlStructures( statement, "\\b(else)\\s(if)\\b" ); //else if
+        //CheckConditionalControlStructures( statement, "else(?!(\\b\\sif\\b))" ); //else
 
-            //Iterative Control Structures
-            CheckIterativeControlStructures( word, "\\bfor\\b" ); //for
-            CheckIterativeControlStructures( word, "\\bwhile\\b" ); //while &d0wl
+        //Iterative Control Structures
+        CheckIterativeControlStructures( statement, "\\bfor\\b" ); //for
+        CheckIterativeControlStructures( statement, "\\bwhile\\b" ); //while & do while
 
-            //catch
-            CheckCatch( word, "\\bcatch\\b" );
+        //catch
+        CheckCatch( statement, "\\bcatch\\b" );
 
-            //switch case
-            CheckSwitch( word, "\\bcase\\b" );
-        }
+        //switch case
+        CheckSwitch( statement, "\\bcase\\b" );
     }
 
-    public void CheckConditionalControlStructures(String word, String operator ) {
+    public void CheckConditionalControlStructures(String statement, String operator ) {
 
-        boolean result = matchPattern( word, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 1;
+            totCtc += 1;
+            lineCtc += 1;
 
-            for (String stword : arrWords) {
+            //for (String word : arrWords) {}
 
-                checkLogicalBitwiseOperatorsForCCS( stword, "(?<!&)&(?!&)" ); //&
-                checkLogicalBitwiseOperatorsForCCS( stword, "&&" ); //&&
-                checkLogicalBitwiseOperatorsForCCS( stword, "\\|" ); //|
-                checkLogicalBitwiseOperatorsForCCS( stword, "\\|\\|" ); //||
-            }
+            checkLogicalBitwiseOperatorsForCCS( statement, "(?<!&)&(?!&)" ); //&
+            checkLogicalBitwiseOperatorsForCCS( statement, "&&" ); //&&
+            checkLogicalBitwiseOperatorsForCCS( statement, "(?<![|])[|](?![|])" ); //|
+            checkLogicalBitwiseOperatorsForCCS( statement, "\\|\\|" ); //||
         }
     }
 
-    public void CheckIterativeControlStructures(String word, String operator ) {
+    public void CheckIterativeControlStructures(String statement, String operator ) {
 
-        boolean result = matchPattern( word, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 2;
+            totCtc += 2;
+            lineCtc += 2;
 
-            for (String stword : arrWords) {
+            //for (String word : arrWords) {}
 
-                checkLogicalBitwiseOperatorsForICS( stword, "(?<!&)&(?!&)" ); //&
-                checkLogicalBitwiseOperatorsForICS( stword, "&&" ); //&&
-                checkLogicalBitwiseOperatorsForICS( stword, "\\|" ); //|
-                checkLogicalBitwiseOperatorsForICS( stword, "\\|\\|" ); //||
-            }
+            checkLogicalBitwiseOperatorsForICS( statement, "(?<!&)&(?!&)" ); //&
+            checkLogicalBitwiseOperatorsForICS( statement, "&&" ); //&&
+            checkLogicalBitwiseOperatorsForICS( statement, "(?<![|])[|](?![|])" ); //|
+            checkLogicalBitwiseOperatorsForICS( statement, "\\|\\|" ); //||
         }
 
     }
 
-    public void checkLogicalBitwiseOperatorsForCCS(String stword, String operator ){
+    public void checkLogicalBitwiseOperatorsForCCS(String statement, String operator ){
 
-        boolean result = matchPattern( stword, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 1;
+            totCtc += 1;
+            lineCtc += 1;
         }
     }
 
-    public void checkLogicalBitwiseOperatorsForICS(String stword, String operator ){
+    public void checkLogicalBitwiseOperatorsForICS(String statement, String operator ){
 
-        boolean result = matchPattern( stword, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 2;
+            totCtc += 2;
+            lineCtc += 2;
         }
     }
 
-    public void CheckCatch(String word, String operator ) {
+    public void CheckCatch(String statement, String operator ) {
 
-        boolean result = matchPattern( word, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 1;
+            totCtc += 1;
+            lineCtc += 1;
         }
 
     }
 
-    public void CheckSwitch(String word, String operator ) {
+    public void CheckSwitch(String statement, String operator ) {
 
-        boolean result = matchPattern( word, operator );
+        boolean result = matchPattern( statement, operator );
 
         if ( result ) {
-            Ctc += 1;
+            totCtc += 1;
+            lineCtc += 1;
         }
     }
 
-    public boolean matchPattern(String word, String operator) {
+    public boolean matchPattern(String statement, String operator) {
 
         Pattern p = Pattern.compile(operator);
-        Matcher m = p.matcher(word);
+        Matcher m = p.matcher(statement);
         return m.find();
     }
 
@@ -136,12 +142,4 @@ public class ctcServiceImpl implements ctcService {
         // -skip print statements
 
     }
-
-    public void checkLogicalBitwiseOperators(){
-
-        //TODO
-        // -general function for checking all Logical & Bitwise Operators
-
-    }
-
 }
