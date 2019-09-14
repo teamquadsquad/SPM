@@ -7,8 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import savindu.java.service.ctcServiceImpl;
@@ -17,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class mainController implements Initializable {
@@ -25,9 +26,19 @@ public class mainController implements Initializable {
     public Button btn_choose_single;
     public Button btn_next;
     public Button btn_exit;
+    public Label lbl_connection;
+
+    private Connection conn = null;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        conn = db.SqliteConnection.Connector();
+
+        try {
+            checkDbConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -69,11 +80,31 @@ public class mainController implements Initializable {
 
     }
 
+    @FXML
+    private void changeScreenNextButtonPushed(ActionEvent event) throws IOException {
+        Parent CustomersParent = FXMLLoader.load(getClass().getResource("output.fxml"));
+        Scene CustomersScene = new Scene(CustomersParent);
+
+        Stage window = (Stage)( (Node)event.getSource()).getScene().getWindow();
+        window.setScene(CustomersScene);
+        window.show();
+    }
+
     public void handleExit(ActionEvent actionEvent) {
         //TODO
     }
 
     public void handleRemoveFile(ActionEvent actionEvent) {
         //TODO
+    }
+
+    public void checkDbConnection() throws SQLException {
+        boolean isconneted = !conn.isClosed();
+
+        if(isconneted){
+            lbl_connection.setText("Connected");
+        }
+        else
+            lbl_connection.setText("Not Connected");
     }
 }

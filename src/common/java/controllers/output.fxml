@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1073.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="common.java.controllers.OutputController">
+   <children>
+      <ScrollPane layoutX="38.0" layoutY="29.0" prefHeight="711.0" prefWidth="1022.0">
+         <content>
+            <TableView fx:id="tbl_code" prefHeight="811.0" prefWidth="1004.0">
+              <columns>
+                <TableColumn fx:id="clm_lineNo" prefWidth="53.5999755859375" text="Line #" />
+                <TableColumn fx:id="clm_statement" prefWidth="372.00001525878906" text="Program Statements" />
+                  <TableColumn fx:id="clm_sizeTokens" prefWidth="275.20001220703125" text="Tokens Identified Under the Size Factor" />
+                  <TableColumn fx:id="clm_cs" minWidth="0.0" prefWidth="40.0" text="Cs" />
+                  <TableColumn fx:id="clm_ctc" minWidth="0.0" prefWidth="33.60003662109375" text="Ctc" />
+                  <TableColumn fx:id="clm_cnc" minWidth="0.0" prefWidth="34.4000244140625" text="Cnc" />
+                  <TableColumn fx:id="clm_ci" minWidth="0.0" prefWidth="37.5999755859375" text="Ci" />
+                  <TableColumn fx:id="clm_tw" minWidth="0.0" prefWidth="47.2000732421875" text="TW" />
+                  <TableColumn fx:id="clm_cps" minWidth="0.0" prefWidth="35.199951171875" text="Cps" />
+                  <TableColumn fx:id="clm_cr" minWidth="0.0" prefWidth="36.0" text="Cr" />
+              </columns>
+            </TableView>
+         </content></ScrollPane>
+      <Label fx:id="lbl_connection" layoutX="55.0" layoutY="3.0" text="Label" />
+   </children>
+</AnchorPane>
