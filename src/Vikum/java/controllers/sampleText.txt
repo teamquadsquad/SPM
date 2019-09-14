@@ -1,0 +1,69 @@
+public boolean checkMultiLineCommentStart(String checkStatement) {
+        //return checkStatement.contains("/*");
+}
+
+public boolean val =  checkMultiLineCommentStart(statement);
+
+/*g+s;
+z*z;
+asdasd*/
+
+if(a==b){
+
+/*h+J*/
+"a + b" + sadfasdf
+
+String str = "asdfasdf";
+
+System.out.println("Error");
+
+//checkArithmeticOperators
+a + b;
+a - b;
+a*b;        //sadf
+a/b; a+f; //sdfg+FG;
+a%b;
+a++;
+a--;
+
+//checkRelationOperators
+a==b;
+a!=b;
+a>b;
+a<b;
+a>=b;
+a<=b;
+
+//checkLogicalOperators
+a&&b;
+a||b;
+a!;
+
+//checkBitwiseOperators
+a|b;
+a^b;
+a~b;
+a<<b;
+a>>b;
+a>>>b;
+a<<<b;
+
+//checkMiscellaneousOperators
+a,b;
+a->b;
+a.b;
+a::b;
+
+//checkAssignmentOperators
+a+=b;
+a-=b;
+a*=b;
+a/=b;
+a=b;
+a>>>=b;
+a|=b;
+a&=b;
+a%=b;
+a<<=b;
+a>>=b;
+a^=b;

@@ -1,5 +1,6 @@
 package common.java.controllers;
 
+import Vikum.java.controllers.ComplexityBySize_I;
 import hashini.java.service.Inheritance;
 import javafx.event.ActionEvent;
 import javafx.event.ActionEvent;
@@ -33,7 +34,7 @@ public class mainController implements Initializable {
 
     }
 
-    public void findComplexity(String selectedFilePath) throws FileNotFoundException {
+    public void findComplexity(String selectedFilePath) throws IOException {
 
         ctcServiceImpl ctcService = new ctcServiceImpl();
 
@@ -46,11 +47,15 @@ public class mainController implements Initializable {
 //            e.printStackTrace();
 //        }
 
+		int Cs = new ComplexityBySize_I().ReadFromFile(selectedFilePath);
+        System.out.println("Value of Cs = " + Cs);
+		
         //Cs Ctc Cnc Ci
         //Total calculation
 
         System.out.println( "Ctc= " + Ctc );
-
+		
+	
 //        Parent ContractParent = FXMLLoader.load(getClass().getResource("ContractManagement.fxml"));
 //        Scene ContractScene = new Scene(ContractParent);
 //
@@ -73,7 +78,7 @@ public class mainController implements Initializable {
             System.out.println("File is not valid");
     }
 
-    public void handleNext(ActionEvent actionEvent) throws FileNotFoundException {
+    public void handleNext(ActionEvent actionEvent) throws IOException {
 
         Object selectedFilePath;
         selectedFilePath = list_files.getSelectionModel().getSelectedItem();
